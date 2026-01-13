@@ -25,11 +25,10 @@ def bakeries():
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
+
     bakery = Bakery.query.filter_by(id=id).first()
-    if not bakery:
-        return make_response({"error": "Bakery not found"}, 404)
     bakery_serialized = bakery.to_dict()
-    return make_response(bakery_serialized, 200)
+    return make_response ( bakery_serialized, 200  )
 
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
@@ -43,10 +42,8 @@ def baked_goods_by_price():
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
     most_expensive = BakedGood.query.order_by(BakedGood.price.desc()).limit(1).first()
-    if not most_expensive:
-        return make_response({"error": "No baked goods found"}, 404)
     most_expensive_serialized = most_expensive.to_dict()
-    return make_response(most_expensive_serialized, 200)
+    return make_response( most_expensive_serialized,   200  )
 
 @app.route('/baked_goods', methods=['POST'])
 def create_baked_good():
@@ -62,8 +59,6 @@ def create_baked_good():
 @app.route('/bakeries/<int:id>', methods=['PATCH'])
 def update_bakery(id):
     bakery = Bakery.query.filter_by(id=id).first()
-    if not bakery:
-        return make_response({"error": "Bakery not found"}, 404)
     bakery.name = request.form.get('name')
     db.session.add(bakery)
     db.session.commit()
@@ -72,8 +67,6 @@ def update_bakery(id):
 @app.route('/baked_goods/<int:id>', methods=['DELETE'])
 def delete_baked_good(id):
     baked_good = BakedGood.query.filter_by(id=id).first()
-    if not baked_good:
-        return make_response({"error": "Baked good not found"}, 404)
     db.session.delete(baked_good)
     db.session.commit()
     return make_response({"message": "Baked good successfully deleted"}, 200)
